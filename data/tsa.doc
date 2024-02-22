@@ -1,0 +1,20 @@
+@import   a   as   b
+@import   c   as   d
+n1 { 
+  ghkkk
+  }
+n2{hhgill}
+n1 -> n2
+subgraph g1 {
+  n3 {hhii}
+  n4 {huul}
+  subgraph g2 {
+      n5 {n5data}
+      n6 {n6data}
+      n5 -> n6
+    }
+  n3 -> n4
+} 
+n2 -> n3
+
+
