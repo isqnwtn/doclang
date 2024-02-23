@@ -28,8 +28,6 @@ library
       Graph.Graph
       Lib
       Parser.Parser
-      Tree.RoseTreeParser
-      Tree.TreeParser
   other-modules:
       Paths_doclang
   hs-source-dirs:
@@ -39,6 +37,7 @@ library
       attoparsec
     , base >=4.7 && <5
     , bytestring
+    , containers
     , dotgen
     , text
   default-language: Haskell2010
@@ -54,6 +53,7 @@ executable doclang-exe
       attoparsec
     , base >=4.7 && <5
     , bytestring
+    , containers
     , doclang
     , dotgen
     , text
@@ -71,6 +71,7 @@ test-suite doclang-test
       attoparsec
     , base >=4.7 && <5
     , bytestring
+    , containers
     , doclang
     , dotgen
     , text

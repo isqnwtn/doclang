@@ -3,24 +3,25 @@ module Parser.Parser (
    Doc(..)
   ,G(..)
   ,dParseEx
+  ,parseFile
   ) where
 
 import Prelude hiding (takeWhile)
 import System.IO (hGetContents,IOMode(..),openFile)
 import Data.ByteString.Char8 (ByteString,pack)
 import Data.Attoparsec.ByteString.Char8 
-        (Parser,takeWhile,inClass,parseOnly,parse
+        (Parser,takeWhile,inClass,parseOnly
         ,char,string)
 import Control.Applicative ((<|>),many)
 
 data Doc a b = Doc {
-    imports :: [Import]
-    , content :: [G a b]
+    imports :: ![Import]
+    , content :: ![G a b]
 } deriving Show
 
 data G a b = NodeDef !ByteString !a
   | Connection !ByteString !ByteString !b
-  | Subgraph !ByteString [G a b]
+  | Subgraph !ByteString ![G a b]
   deriving Show
 
 data Import = Import !ByteString !ByteString
@@ -36,7 +37,7 @@ ws :: Parser ByteString
 ws = takeWhile $ inClass "\r\t "
 
 importParse :: Parser [Import]
-importParse = many singleImport 
+importParse = many $ ignore *> singleImport <* ignore
   where 
     singleImport = do 
       _ <- string "@import"
@@ -69,7 +70,14 @@ contentParse = many (nodeDefParse <|> connectionParse <|> subgraphParse)
 
 
 docParse :: Parser (Doc ByteString ByteString)
-docParse = Doc <$> importParse <*> contentParse
+docParse = Doc <$> (ignore *> importParse <* ignore) <*> ( ignore *> contentParse <* ignore )
+
+parseFile :: String -> IO (Either String (Doc ByteString ByteString))
+parseFile filename = do 
+  handle <- openFile filename ReadMode
+  contents <- hGetContents handle
+  return $ parseOnly docParse $ pack contents
+  
 
 dParseEx :: IO ()
 dParseEx = do

@@ -1,8 +1,7 @@
-@import   a   as   b
-@import   c   as   d
-n1 { 
-  ghkkk
-  }
+@import a as b
+@import c as d
+
+n1 {meow}
 n2{hhgill}
 n1 -> n2
 subgraph g1 {
@@ -15,6 +14,6 @@ subgraph g1 {
     }
   n3 -> n4
 } 
-n2 -> n3
+n2 -> n1
 
 

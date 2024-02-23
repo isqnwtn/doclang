@@ -25,6 +25,7 @@ dependencies:
 - dotgen
 - attoparsec
 - bytestring
+- containers
 
 ghc-options:
 - -Wall
