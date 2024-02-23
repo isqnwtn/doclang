@@ -20,7 +20,7 @@ data Doc a b = Doc {
 } deriving Show
 
 data G a b = NodeDef !ByteString !a
-  | Connection !ByteString !ByteString !b
+  | Connection ![ByteString] ![ByteString] !b
   | Subgraph !ByteString ![G a b]
   deriving Show
 
@@ -35,6 +35,20 @@ ignore = takeWhile $ inClass " \r\n\t"
 
 ws :: Parser ByteString
 ws = takeWhile $ inClass "\r\t "
+
+iaround :: Parser a -> Parser a 
+iaround p = ignore *> p <* ignore
+
+dotted :: Parser [ByteString]
+dotted = compound <|> single 
+  where 
+    single = do 
+      s <- identifier
+      return [s]
+    compound = do 
+      head <- (many $ identifier <* char '.') 
+      tail <- identifier
+      return (head ++ [tail])
 
 importParse :: Parser [Import]
 importParse = many $ ignore *> singleImport <* ignore
@@ -58,9 +72,9 @@ contentParse = many (nodeDefParse <|> connectionParse <|> subgraphParse)
       return $ NodeDef nodename nodecontent
 
     connectionParse = do 
-      n1 <- ws *> identifier <* ws 
+      n1 <- ws *> dotted <* ws 
       _ <- string "->"
-      n2 <- ws *> identifier <* ignore
+      n2 <- ws *> dotted <* ignore
       return $ Connection n1 n2 ""
     subgraphParse = do 
       name <- ws *> string "subgraph" *> ws *> identifier <* ws
