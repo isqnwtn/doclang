@@ -1,19 +1,21 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Lib
-    ( someFunc
+    ( testFn
     ) where
 
-import  Text.Dot 
 
-someFunc :: IO ()
-someFunc = putStrLn $ showDot $ g
+import Prelude hiding (takeWhile)
+import Data.Attoparsec.ByteString.Char8
+        (Parser,takeWhile,takeTill,inClass,parseOnly
+        ,char,string, notInClass)
+import Data.ByteString.Char8 (ByteString,pack)
+import Control.Applicative ((<|>),many)
 
-g :: Dot ()
-g = do
-  a <- node [("label","a")]
-  b <- node [("label","b")]
-  c <- node [("label","c")]
-  a .->. b
-  a .->. c
+import Parser.Utils
 
+testFn :: IO ()
+testFn = do
+  print $ parseOnly par $ "  \n  \"this is a long ass text in quotes\"   "
+  where 
+    par = ignore *> readQuotes  <* ignore

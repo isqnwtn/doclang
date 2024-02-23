@@ -6,7 +6,7 @@ import Data.ByteString.Char8 (unpack)
 
 main :: IO ()
 main = do 
-  graph <- parseFile "data/tsa.dot"
+  graph <- parseFile "data/test.dot"
   -- print graph
   case graph of 
     Left _ -> return ()

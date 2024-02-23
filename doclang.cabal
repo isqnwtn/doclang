@@ -27,7 +27,10 @@ library
   exposed-modules:
       Graph.Graph
       Lib
+      Parser.GenericGraph
+      Parser.Nodes
       Parser.Parser
+      Parser.Utils
   other-modules:
       Paths_doclang
   hs-source-dirs:
