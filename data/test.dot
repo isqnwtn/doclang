@@ -1,0 +1,43 @@
+@import a as b
+@import c as d
+
+n1 {"starting node"}
+n2  {"second node in list"}
+n1 -> n2
+subgraph g1 {
+  n3 {"n3 data"}
+  n4 -> n3
+  n4 {list ["aa" "fsii" "fjilj"]}
+  subgraph g2 {
+      n5 {"n5 data"}
+      n6 {
+          list [
+          "n6 first" 
+          "n6 second"
+          (p "ports XD")
+          ]
+        }
+      n5 -> n6
+    }
+  n3 -> n4
+  subgraph g3 {
+      n1{"I can use n1 again"}
+      n2{"n2 as well"}
+      n3{list["n3 this time" "but as a list" (p1 "what about ports?")]}
+      n4{table[
+        {"field1" "type1"}
+        {"field2" "type2"}
+        {"field3" (f "type3")}]}
+      n1 -> n2 
+      n3 -> n2 
+      n1 -> n3
+      n1 -> n4:f
+  }
+  g2.n6 -> g3.n2
+  g3.n3:p1 -> g2.n6:p
+} 
+n1 -> g1.g3.n1
+n2 -> g1.n3
+n2 -> g1.g2.n6
+
+
