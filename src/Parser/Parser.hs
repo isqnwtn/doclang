@@ -10,7 +10,7 @@ import System.IO (hGetContents,IOMode(..),openFile)
 import Data.ByteString.Char8 (ByteString,pack)
 import Data.Attoparsec.ByteString.Char8
         (Parser,takeWhile,inClass,parseOnly
-        ,char,string,endOfInput)
+        ,char,string,endOfInput, skipSpace)
 import Control.Applicative ((<|>),many)
 
 import Parser.Utils
@@ -26,7 +26,7 @@ data Import = Import !ByteString !ByteString
   deriving Show
 
 importParse :: Parser [Import]
-importParse = many $ ignore *> singleImport <* ignore
+importParse = many $ skipSpace *> singleImport <* skipSpace
   where
     singleImport = do
       _ <- string "@import"
@@ -43,5 +43,5 @@ parseFile :: String -> IO (Either String (Doc NodeType ByteString))
 parseFile filename = do
   handle <- openFile filename ReadMode
   contents <- hGetContents handle
-  return $ parseOnly (docParse <* ignore) $ pack contents
+  return $ parseOnly (docParse <* skipSpace) $ pack contents
 
